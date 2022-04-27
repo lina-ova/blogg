@@ -1,24 +1,25 @@
-import logo from './logo.svg';
 import './App.css';
+import { BrowserRouter as Router, Routes, Route} from 'react-router-dom';
+import { Home, Login, CreatePost } from './pages'
+
+import { auth } from './firebase-config'
+import { useAuthState } from 'react-firebase-hooks/auth';
+import Linkes  from './Linkes'
 
 function App() {
+  const [user, setUser] = useAuthState(auth);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+
+      <Linkes user={user}/>
+
+      <Routes>
+        <Route path="/" element={<Home isAuth={user}/>} />
+        <Route path="/createpost" element={<CreatePost isAuth={user}/>} />
+        <Route path="/login" element={<Login setIsAuth={setUser}/>} />
+      </Routes>
+    </Router>
   );
 }
 
